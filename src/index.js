@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import'./style.js';
 import * as serviceWorker from './serviceWorker';
+import './static/iconfont/iconfont'
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
