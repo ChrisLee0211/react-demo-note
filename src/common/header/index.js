@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import {CSSTransition} from 'react-transition-group';
+import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { CSSTransition } from 'react-transition-group';
 import {
     HeaderWrapper,
     Logo,
@@ -12,15 +13,9 @@ import {
 } from './style'
 
 class Header extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            focused:false
-        }
-        this.handleInputFocus = this.handleInputFocus.bind(this);
-        this.handleInputBlur = this.handleInputBlur.bind(this)
-    }
-    render(){
+
+
+    render() {
         return (
             <HeaderWrapper>
                 <Logo></Logo>
@@ -32,17 +27,17 @@ class Header extends Component {
                         <span className="iconfont">&#xe607;</span>
                     </NavItem>
                     <SearchWrapper>
-                    <CSSTransition timeout={200} in={this.state.focused} classNames="slide">
-                    <NavSearch onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}  className={this.state.focused?'focused':''}></NavSearch>
-                    </CSSTransition>
-                    <span className={this.state.focused?'focused iconfont':'iconfont'}>&#xe648;</span>
+                        <CSSTransition timeout={200} in={this.props.focused} classNames="slide">
+                            <NavSearch onFocus={this.props.handleInputFocus} onBlur={this.props.handleInputBlur} className={this.props.focused ? 'focused' : ''}></NavSearch>
+                        </CSSTransition>
+                        <span className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe648;</span>
                     </SearchWrapper>
-                    
+
                 </Nav>
                 <Addition>
                     <Button className="writting" >
-                    <span className="iconfont">&#xe600;</span>
-                    写文章
+                        <span className="iconfont">&#xe600;</span>
+                        写文章
                     </Button>
                     <Button className="reg">注册</Button>
                 </Addition>
@@ -50,17 +45,30 @@ class Header extends Component {
         )
     }
 
-    handleInputFocus(){
-        this.setState({
-            focused:true
-        })
-    }
+}
 
-    handleInputBlur(){
-        this.setState({
-            focused:false
-        })
+const mapStateToProps = (state) => {
+    return {
+        focused: state.focused
     }
 }
 
-export default Header;
+
+const mapDispathToProps = (dispatch) => {
+    return {
+        handleInputFocus() {
+            const action = {
+                type: 'search_focus'
+            };
+            dispatch(action)
+        },
+        handleInputBlur() {
+            const actions = {
+                type: 'search_blur',
+            }
+            dispatch(actions)
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispathToProps)(Header);
