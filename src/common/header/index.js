@@ -18,31 +18,6 @@ import {
     SearchInfoList
 } from './style'
 
-
-const getListArea = (show) => {
-    if (show) {
-        return (
-            <SearchInfo>
-                <SearchInfoTitle>
-                    热门搜索
-                                <SearchInfoSwitch>换一批</SearchInfoSwitch>
-                </SearchInfoTitle>
-                <SearchInfoList>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                    <SearchInfoItem>教育</SearchInfoItem>
-                </SearchInfoList>
-            </SearchInfo>
-        )
-    } else {
-        return null
-    }
-}
-
 class Header extends Component {
 
 
@@ -62,7 +37,7 @@ class Header extends Component {
                             <NavSearch onFocus={this.props.handleInputFocus} onBlur={this.props.handleInputBlur} className={this.props.focused ? 'focused' : ''}></NavSearch>
                         </CSSTransition>
                         <span className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe648;</span>
-                        {getListArea(this.props.focused)}
+                        {this.getListArea()}
                     </SearchWrapper>
 
                 </Nav>
@@ -77,11 +52,34 @@ class Header extends Component {
         )
     }
 
+    getListArea(){
+        if (this.props.focused) {
+        return (
+            <SearchInfo>
+                <SearchInfoTitle>
+                    热门搜索
+                                <SearchInfoSwitch>换一批</SearchInfoSwitch>
+                </SearchInfoTitle>
+                <SearchInfoList>
+                    {
+                        this.props.list.map((item)=>{
+                            return <SearchInfoItem key={item}>{item}</SearchInfoItem>
+                        })
+                    }
+                </SearchInfoList>
+            </SearchInfo>
+        )
+    } else {
+        return null
+    }
+    }
+
 }
 
 const mapStateToProps = (state) => {
     return {
-        focused: state.get('header').get('focused')
+        focused: state.get('header').get('focused'),
+        list:state.get('header').get('list')
     }
 }
 
@@ -89,6 +87,7 @@ const mapStateToProps = (state) => {
 const mapDispathToProps = (dispatch) => {
     return {
         handleInputFocus() {
+            dispatch(actionCreator.getList())
             dispatch(actionCreator.searchFocus())
         },
         handleInputBlur() {
