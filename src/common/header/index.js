@@ -22,6 +22,7 @@ class Header extends Component {
 
 
     render() {
+        const {focused,handleInputBlur,handleInputFocus} = this.props;
         return (
             <HeaderWrapper>
                 <Logo></Logo>
@@ -33,10 +34,10 @@ class Header extends Component {
                         <span className="iconfont">&#xe607;</span>
                     </NavItem>
                     <SearchWrapper>
-                        <CSSTransition timeout={200} in={this.props.focused} classNames="slide">
-                            <NavSearch onFocus={this.props.handleInputFocus} onBlur={this.props.handleInputBlur} className={this.props.focused ? 'focused' : ''}></NavSearch>
+                        <CSSTransition timeout={200} in={focused} classNames="slide">
+                            <NavSearch onFocus={handleInputFocus} onBlur={handleInputBlur} className={this.props.focused ? 'focused' : ''}></NavSearch>
                         </CSSTransition>
-                        <span className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe648;</span>
+                        <span className={focused ? 'focused iconfont' : 'iconfont'}>&#xe648;</span>
                         {this.getListArea()}
                     </SearchWrapper>
 
@@ -53,19 +54,26 @@ class Header extends Component {
     }
 
     getListArea(){
-        if (this.props.focused) {
+        const {focused,list,page,totalPage, mouseIn, handleMouseEnter,handleMouseLeave, handleChangePage} = this.props;
+        const newList = list.toJS();
+        const pageList = [];
+        if(newList.length){
+            for (let i = (page-1)*10; i < page *10; i++) {
+                pageList.push(
+                    <SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
+                )
+                
+            }
+        }
+        if (focused || mouseIn) {
         return (
-            <SearchInfo>
+            <SearchInfo onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <SearchInfoTitle>
                     热门搜索
-                                <SearchInfoSwitch>换一批</SearchInfoSwitch>
+                        <SearchInfoSwitch onClick={()=>handleChangePage(page,totalPage)}>换一批</SearchInfoSwitch>
                 </SearchInfoTitle>
                 <SearchInfoList>
-                    {
-                        this.props.list.map((item)=>{
-                            return <SearchInfoItem key={item}>{item}</SearchInfoItem>
-                        })
-                    }
+                    {pageList}
                 </SearchInfoList>
             </SearchInfo>
         )
@@ -79,7 +87,10 @@ class Header extends Component {
 const mapStateToProps = (state) => {
     return {
         focused: state.get('header').get('focused'),
-        list:state.get('header').get('list')
+        list:state.get('header').get('list'),
+        page:state.get('header').get('page'),
+        mouseIn:state.get('header').get('mouseIn'),
+        totalPage:state.get('header').get('totalPage'),
     }
 }
 
@@ -92,6 +103,19 @@ const mapDispathToProps = (dispatch) => {
         },
         handleInputBlur() {
             dispatch(actionCreator.searchBlur())
+        },
+        handleMouseEnter(){
+            dispatch(actionCreator.mouseEnter())
+        },
+        handleMouseLeave(){
+            dispatch(actionCreator.mouseLeave())
+        },
+        handleChangePage(page,totalPage){
+            if(page<totalPage){
+                dispatch(actionCreator.changePage(page+1))
+            }else{
+                dispatch(actionCreator.changePage(1))
+            }
         }
     }
 }
