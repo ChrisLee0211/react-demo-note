@@ -70,7 +70,7 @@ class Header extends Component {
             <SearchInfo onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <SearchInfoTitle>
                     热门搜索
-                        <SearchInfoSwitch onClick={handleChangePage(page,totalPage)}>换一批</SearchInfoSwitch>
+                        <SearchInfoSwitch onClick={()=>{handleChangePage(page,totalPage)}}>换一批</SearchInfoSwitch>
                 </SearchInfoTitle>
                 <SearchInfoList>
                     {pageList}
