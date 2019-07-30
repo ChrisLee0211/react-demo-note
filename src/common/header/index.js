@@ -22,7 +22,7 @@ class Header extends Component {
 
 
     render() {
-        const {focused,handleInputBlur,handleInputFocus} = this.props;
+        const {focused,handleInputBlur,handleInputFocus, list} = this.props;
         return (
             <HeaderWrapper>
                 <Logo></Logo>
@@ -35,9 +35,9 @@ class Header extends Component {
                     </NavItem>
                     <SearchWrapper>
                         <CSSTransition timeout={200} in={focused} classNames="slide">
-                            <NavSearch onFocus={handleInputFocus} onBlur={handleInputBlur} className={this.props.focused ? 'focused' : ''}></NavSearch>
+                            <NavSearch onFocus={()=>{handleInputFocus(list)}} onBlur={handleInputBlur} className={this.props.focused ? 'focused' : ''}></NavSearch>
                         </CSSTransition>
-                        <span className={focused ? 'focused iconfont' : 'iconfont'}>&#xe648;</span>
+                        <span className={focused ? 'focused iconfont zoon' : 'iconfont zoom'}>&#xe648;</span>
                         {this.getListArea()}
                     </SearchWrapper>
 
@@ -60,7 +60,7 @@ class Header extends Component {
         if(newList.length){
             for (let i = (page-1)*10; i < page *10; i++) {
                 pageList.push(
-                    <SearchInfoItem key={newList[i]}>{newList[i]}</SearchInfoItem>
+                    <SearchInfoItem key={i}>{newList[i]}</SearchInfoItem>
                 )
                 
             }
@@ -70,7 +70,10 @@ class Header extends Component {
             <SearchInfo onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <SearchInfoTitle>
                     热门搜索
-                        <SearchInfoSwitch onClick={()=>{handleChangePage(page,totalPage)}}>换一批</SearchInfoSwitch>
+                        <SearchInfoSwitch onClick={()=>{handleChangePage(page,totalPage,this.spinIcon)}}>
+                        <span ref={(icon)=>{this.spinIcon = icon}} className="iconfont spin">&#xe851;</span>
+                            换一批
+                        </SearchInfoSwitch>
                 </SearchInfoTitle>
                 <SearchInfoList>
                     {pageList}
@@ -97,8 +100,8 @@ const mapStateToProps = (state) => {
 
 const mapDispathToProps = (dispatch) => {
     return {
-        handleInputFocus() {
-            dispatch(actionCreator.getList())
+        handleInputFocus(list) {
+            (list.size === 0)&&dispatch(actionCreator.getList())
             dispatch(actionCreator.searchFocus())
         },
         handleInputBlur() {
@@ -110,7 +113,14 @@ const mapDispathToProps = (dispatch) => {
         handleMouseLeave(){
             dispatch(actionCreator.mouseLeave())
         },
-        handleChangePage(page,totalPage){
+        handleChangePage(page,totalPage,spin){
+            let originAngle = spin.style.transform.replace(/[^0-9]/ig,'');
+            if(originAngle){
+                originAngle = parseInt(originAngle,10);
+            }else{
+                originAngle = 0;
+            }
+            spin.style.transform = `rotate(${originAngle + 360}deg)`
             if(page<totalPage){
                 dispatch(actionCreator.changePage(page+1))
             }else{
