@@ -33,7 +33,7 @@ export const NavItem = styled.div`
     line-height:56px;
     padding:0 15px;
     font-size:17px;
-    color:#333
+    color:#333;
     &.left{
         float:left;
     }
@@ -48,7 +48,7 @@ export const NavItem = styled.div`
 `
 
 export const SearchWrapper = styled.div`
-    position:relative    
+    position:relative;    
     float:left;
     .zoom {
         position:absolute;
@@ -89,7 +89,7 @@ export const NavSearch = styled.input.attrs({
 
     }
     &.slide-enter{
-        width:160px
+        width:160px;
         transition:all .2s ease-out;
     }
     &.slide-enter-active{
@@ -149,7 +149,7 @@ export const SearchInfoItem = styled.a`
     margin-bottom: 15px;
     line-height: 20px;
     font-size: 12px;
-    border 1px solid #ddd;
+    border: 1px solid #ddd;
     color: #787878;
     border-radius: 3px;
 `
