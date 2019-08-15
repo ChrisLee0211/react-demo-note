@@ -16,9 +16,9 @@ class App extends React.Component {
         <div>
           <CssStyle/>
           <Css/>
-          <Header></Header>
           <BrowserRouter>
           <div>
+            <Header></Header>
             <Route path='/' exact component={Home}></Route>
             <Route path='/detail' exact component={Detail}></Route>
           </div>
