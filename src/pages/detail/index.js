@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {DetailWrapper, Header, Content} from './style'
 import {connect} from 'react-redux'
+import {withRouter} from 'react-router-dom'
 import {actionCreators} from './store'
 class Detail extends Component {
     render(){
@@ -26,8 +27,9 @@ const mapState = (state) =>({
 
 const mapDispatch = (dispatch) => ({
     getDetail(id){
+        console.log(id)
         dispatch(actionCreators.getDetail(id))
     }
 })
 
-export default connect(mapState,mapDispatch)(Detail);
+export default connect(mapState,mapDispatch)(withRouter(Detail));

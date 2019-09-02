@@ -5,7 +5,6 @@ import { LoginWrapper,LoginBox,Input,Button } from './style'
 import {actionCreators} from './store'
 class Login extends PureComponent {
     render(){
-        console.log('进入render函数')
         const {loginState} = this.props;
         if(!loginState){
             return (

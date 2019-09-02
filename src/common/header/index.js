@@ -27,7 +27,7 @@ class Header extends Component {
         const { focused, handleInputBlur, handleInputFocus, list, login,logout } = this.props;
         return (
             <HeaderWrapper>
-                <Link to='./'>
+                <Link to='/'>
                     <Logo></Logo>
                 </Link>
                 <Nav>
@@ -52,10 +52,12 @@ class Header extends Component {
 
                 </Nav>
                 <Addition>
-                    <Button className="writting" >
-                        <span className="iconfont">&#xe600;</span>
-                        写文章
-                    </Button>
+                    <Link to='/write'>
+                        <Button className="writting" >
+                            <span className="iconfont">&#xe600;</span>
+                            写文章
+                        </Button>
+                    </Link>
                     <Button className="reg">注册</Button>
                 </Addition>
             </HeaderWrapper>
